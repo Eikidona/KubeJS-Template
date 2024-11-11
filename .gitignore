@@ -1,10 +1,10 @@
 #忽略全部
 /*
 #不忽略的
-!./client_scripts/
-!./server_scripts/
-!./startup_scripts/
-!./README.md
+!/client_scripts/
+!/server_scripts/
+!/startup_scripts/
+!/README.md
 !/.gitignore
 #忽略
 mods/*zmedievalmusic*.jar
