@@ -18,7 +18,7 @@ FactionManager.prototype = {
    * @returns {ModpackRegistryObject<Faction>}
    */
   register: function (pId, pFaction) {
-    let location = Modpack.static.createResourceLocation(pId).toString();
+    let location = Modpack.static.createLocation(pId).toString();
     if (!(this.byLocation.has(location))) {
       this.byLocation.set(location, pFaction);
       this.byFaction.set(pFaction, location);
@@ -44,7 +44,7 @@ FactionManager.prototype = {
    * @param {String} pId 
    */
   getFaction: function (pId) {
-    let location = Modpack.static.createResourceLocation(pId).toString();
+    let location = Modpack.static.createLocation(pId).toString();
     return this.byLocation.get(location);
   },
   /**
@@ -197,7 +197,7 @@ FactionManager.static = {
   /**@type {FactionManager} 单例模式 管理器唯一实例*/
   INSTANCE: new FactionManager(),
   /**@type {string} 默认Key 用于查询为空时 */
-  DEFAULT_KEY: Modpack.static.createResourceLocation('empty').toString(),
+  DEFAULT_KEY: Modpack.static.createLocation('empty').toString(),
   /**@type {Faction} 默认Faction 用于查询为空时 */
   DEFAULT_VALUE: Faction.static.EMPTY
 }

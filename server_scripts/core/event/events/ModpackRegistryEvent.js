@@ -6,26 +6,15 @@ function ModpackRegistryEvent() {
 
 }
 ModpackRegistryEvent.prototype = {
-  // /**
-  //  * 创建注册表
-  //  * @param {string} pRegistryName 
-  //  * @param {string} defaultKey
-  //  * @param {() => T} defaultValueSupplier 
-  //  * @returns {}
-  //  */
-  // create: function (pRegistryName, defaultKey, defaultValueSupplier) {
-  //   ModpackRegistry.static.createRegistry(pRegistryName, defaultKey, defaultValueSupplier)
-  // }
   /**
-   * 
-   * @param {(registryBuilder: (ModpackRegistryBuilder)) => void} pRegistryConsumer 
-   * @returns {}
+   * 创建注册表
+   * @param {(registryBuilder: (ModpackRegistryBuilder)) => void} builderConsumer - 构造器执行
    */
-  create: function (pRegistryConsumer) {
-    ServerEvents.lowPriorityData(e => {
-      let registryBuilder = new ModpackRegistryBuilder();
-      pRegistryConsumer(registryBuilder);
-      ModpackRegistry.static.createRegistry()
-    })
+  create: function (builderConsumer) {
+    // ServerEvents.lowPriorityData(e => {
+    //   let registryBuilder = new ModpackRegistryBuilder();
+    //   builderConsumer(registryBuilder);
+    //   ModpackRegistry.static.createRegistryFromBuilder(registryBuilder);
+    // })
   }
 }

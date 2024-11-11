@@ -4,36 +4,42 @@
  * @template T
  */
 function ModpackRegistryBuilder() {
-  /**@type {() => string} */
+  /**@type {string} */
   this.registryName;
-  /**@type {() => string} */
+  /**@type {string} */
   this.defaultKey;
   /**@type {() => T} */
   this.defaultValue;
 }
 ModpackRegistryBuilder.prototype = {
   /**
-   * 设置注册表名称
-   * @param {() => string} pRegistryName 
+   * 设置注册表名称 无需手动调用
+   * @param {string} pRegistryName 
    */
   setRegistryName: function (pRegistryName) {
-    this.registryName = pRegistryName;
+    if (!Boolean(this.registryName)) {
+      this.registryName = pRegistryName;
+    }
     return this;
   },
-   /**
-   * 设置注册表默认键
-   * @param {() => string} pDefaultKey
-   */
+  /**
+  * 设置注册表默认键
+  * @param {() => string} pDefaultKey
+  */
   setDefaultKey: function (pDefaultKey) {
-    this.defaultKey = pDefaultKey;
+    if (!Boolean(this.defaultKey)) {
+      this.defaultKey = pDefaultKey;
+    }
     return this;
   },
   /**
   * 设置注册表默认值
   * @param {() => T} pDefaultValue
   */
- setDefaultValue: function (pDefaultValue) {
-   this.defaultValue = pDefaultValue;
-   return this;
- }
+  setDefaultValue: function (pDefaultValue) {
+    if (!Boolean(this.defaultValue)) {
+      this.defaultValue = pDefaultValue;
+    }
+    return this;
+  }
 }

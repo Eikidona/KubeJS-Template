@@ -2,18 +2,18 @@
  * @class
  * @classdesc
  * @template T
- * @param {ResourceLocation} pRegistryName 
- * @param {ResourceLocation} pLocation 
+ * @param {ResourceLocation} registryName 
+ * @param {ResourceLocation} location 
  */
-function ModpackResourceKey(pRegistryName, pLocation) {
-  this.registryName = pRegistryName;
-  this.resourcelocation = pLocation;
+function ModpackResourceKey(registryName, location) {
+  this.registryName = registryName;
+  this.location = location;
 }
 ModpackResourceKey.prototype = {
-  registry: function() {
+  getRegistry: function() {
     return this.registryName;
   },
-  location: function() {
-    return this.resourcelocation;
+  getLocation: function() {
+    return this.location;
   }
 }
