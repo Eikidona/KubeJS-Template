@@ -17,7 +17,8 @@ Modpack.static = {
   createLocation: function (path) {
     /**@type {ResourceLocation} */
     let resourceLocation;
-    if (path.includes(':')) {
+    console.log(`调试输出 ${String(path)}`)
+    if (path.indexOf(':') != -1) {
       resourceLocation = new ResourceLocation(path);
     } else {
       resourceLocation = new ResourceLocation(Modpack.static.ID, path);

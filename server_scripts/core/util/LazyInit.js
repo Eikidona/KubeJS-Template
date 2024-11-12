@@ -2,18 +2,18 @@
 
 /**
  * @class
- * @classdesc 用于延迟初始化 保证初始化不会因为加载顺序发生undefined
+ * @classdesc 用于延迟初始化的容器对象
  * @template T
  * @param {Internal.Supplier_<T>} pSupplier 
  */
-function ModpackLazyInitialization(pSupplier) {
+function LazyInit(pSupplier) {
   /**@type {T} */
   this.value;
   /**@type {Internal.Supplier_<T>} */
   this.supplier = pSupplier;
 }
 
-ModpackLazyInitialization.prototype = {
+LazyInit.prototype = {
   /**
    * @returns {T}
    */

@@ -1,4 +1,4 @@
-// priority: 10000
+// priority: 999999
 const $Entity = Java.loadClass('net.minecraft.world.entity.Entity');
 const $Mob = Java.loadClass('net.minecraft.world.entity.Mob');
 const $NearestAttackableTargetGoal = Java.loadClass('net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal');

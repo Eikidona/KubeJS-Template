@@ -1,14 +1,10 @@
-/**
- * @typedef {'init' | 'registry' | 'register'} LoadPhaseEnum 加载状态枚举 用于进行一些操作时查看当前状态 阻止在注册阶段前从注册表获取值
- */
-
-
+// priority: 10000
 /**
  * @class
  * @classdesc 只是为了存储一些状态而存在
  */
 function Main() {
-  
+
 }
 Main.prototype = {
 
@@ -25,12 +21,17 @@ Main.static = {
     ServerEvents.lowPriorityData(event => {
       // 更新加载阶段
       Main.static.LoadPhase = 'registry';
-      // 触发事件总线 
-      CustomEventBus.static.EVENT_BUS.post('newRegistry', new newRegistryEvent());
+      /**
+       * 新建注册表 事件结束后从事件内获取builder来构建注册表
+       */
+      // let newRegistryEvent = new NewRegistryEvent(); 
+      packEventBus.static.EVENT_BUS.post('newRegistry', new NewRegistryEvent());
+      // PackRegistryBuilder.static.build(newRegistryEvent.registryBuilder.get());
+      
       // 更新加载阶段
       Main.static.LoadPhase = 'register';
       // 触发事件总线 
-      CustomEventBus.static.EVENT_BUS.post('register', new RegisterEvent());
+      packEventBus.static.EVENT_BUS.post('register', new RegisterEvent());
     })
   }
 }

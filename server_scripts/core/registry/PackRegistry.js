@@ -4,13 +4,13 @@
  * @description - 保存在映射内的一定是基本类型string 为了支持新构造出的ResourceLocation也能获取注册表项
  * @template T
  */
-function CustomRegistry() {
+function PackRegistry() {
   /**@type {Map<string, T>} */
   this.byKey = new Map();
   /**@type {Map<T, string>} */
   this.byValue = new Map();
 }
-CustomRegistry.prototype = {
+PackRegistry.prototype = {
   /**
    * 注册 用于外部(相对)的方法 使用ResourceLocation
    * @param {ResourceLocation} key - 键
@@ -39,9 +39,9 @@ CustomRegistry.prototype = {
     return $Optional.ofNullable(Modpack.static.createLocation(this.byValue.get(value)));
   }
 }
-CustomRegistry.static = {
+PackRegistry.static = {
   /**@type {Map<string, T>} 根注册表 注册表的注册表*/
-  REGISTRY: new CustomRegistry(),
+  REGISTRY: new PackRegistry(),
   /**
    * 新注册表 该方法不直接使用 
    * @param {ResourceLocation} registryName - 注册表名称 这里使用ResourceLocation是为了更外层的引用封装
@@ -49,8 +49,8 @@ CustomRegistry.static = {
    * @param {T} defaultValue - 注册表默认值
    */
   newRegistry: function (registryName, defaultKey, defaultValue) {
-    let newRegistry = new CustomRegistry().register(defaultKey, defaultValue);
-    CustomRegistry.static.REGISTRY.register(registryName, newRegistry);
+    let newRegistry = new PackRegistry().register(defaultKey, defaultValue);
+    PackRegistry.static.REGISTRY.register(registryName, newRegistry);
     return newRegistry;
   }
 }
@@ -59,20 +59,20 @@ CustomRegistry.static = {
  * @class
  * @classdesc 注册表构造器 
  */
-function CustomRegistryBuilder() {
+function PackRegistryBuilder() {
   /**@type {ResourceLocation} */
-  this.registryName;
+  this.registryName = new ResourceLocation('modpack:empty');
   /**@type {ResourceLocation} */
-  this.defaultKey;
+  this.defaultKey = new ResourceLocation('modpack:empty');
   /**@type {() => T} */
-  this.defaultValue;
+  this.defaultValue = () => 'empty';
 }
 
-CustomRegistryBuilder.prototype = {
+PackRegistryBuilder.prototype = {
   /**
    * 设置注册表名称
    * @param {ResourceLocation} registryName 注册表资源位置
-   * @returns {CustomRegistryBuilder}
+   * @returns {PackRegistryBuilder}
    */
   setName: function (registryName) {
     this.registryName = registryName;
@@ -81,7 +81,7 @@ CustomRegistryBuilder.prototype = {
   /**
    * 设置默认键
    * @param {ResourceLocation} defaultKey 默认键
-   * @returns {CustomRegistryBuilder}
+   * @returns {PackRegistryBuilder}
    */
   setDefaultKey: function (defaultKey) {
     this.defaultKey = defaultKey;
@@ -90,17 +90,23 @@ CustomRegistryBuilder.prototype = {
   /**
    * 设置默认值 Supplier<T> 防止优先级带来的undefined
    * @param {() => T} defaultValue 
-   * @returns {CustomRegistryBuilder}
+   * @returns {PackRegistryBuilder}
    */
   setDefaultValue: function (defaultValue) {
     this.defaultValue = defaultValue;
     return this;
   },
   /**
-   * 检查、构建并注册注册表
-   * @returns {}
+   * 创建
    */
   build: function () {
-    
+    let { registryName, defaultKey, defaultValue } = this;
+    if (String(registryName) == 'modpack:empty') console.error('注册表未提供id 创建失败');
+    if (String(defaultKey) == 'modpack:empty') console.warn(`注册表${String(registryName)}未提供默认Key`);
+    if (defaultValue() == 'empty') console.warn(`注册表${String(registryName)}未提供默认Value`);
+    PackRegistry.static.newRegistry(registryName, defaultKey, defaultValue());
   }
+}
+PackRegistryBuilder.static = {
+
 }

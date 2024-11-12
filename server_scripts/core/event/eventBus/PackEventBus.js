@@ -2,13 +2,13 @@
  * @class
  * @classdesc - 拟事件总线 保存了eventId: eventConsumer<Event>
  */
-function CustomEventBus() {
+function packEventBus() {
   /**
    * @type {Map<string, Array<(T) => void>} 事件id与事件执行
    */
   this.listeners = new Map();
 }
-CustomEventBus.prototype = {
+packEventBus.prototype = {
   /**
    * 发布事件 这里的事件名称应该与事件组的函数名相同 触发指定事件名上的所有Consumer<T> 一般不直接使用 等待封装
    * @param {string} eventName
@@ -33,6 +33,6 @@ CustomEventBus.prototype = {
     }
   }
 }
-CustomEventBus.static = {
-  EVENT_BUS: new CustomEventBus
+packEventBus.static = {
+  EVENT_BUS: new packEventBus
 }
