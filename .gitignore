@@ -7,7 +7,7 @@
 # .gitignore
 !.gitignore
 # KubeJS
-# !/kubejs/
+# !/kubejs/ 事实证明这个更大范围的规则让下方小范围的规则失去意义
 !/kubejs/client_scripts/
 !/kubejs/server_scripts/
 !/kubejs/startup_scripts/
