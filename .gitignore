@@ -7,12 +7,12 @@
 # .gitignore
 !.gitignore
 # KubeJS
-!/kubejs/
+# !/kubejs/
 !/kubejs/client_scripts/
 !/kubejs/server_scripts/
 !/kubejs/startup_scripts/
 # Mods
-!/mods/
+# !/mods/
 !/mods/architectury*.jar
 !/mods/kubejs*.jar
 !/mods/probejs*.jar
