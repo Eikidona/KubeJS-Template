@@ -1,20 +1,15 @@
 #忽略全部
 /*
 #不忽略的
-
-/kubejs/*
-
-!kubejs/client_scripts
-!kubejs/server_scripts
-!kubejs/startup_scripts
-
-/mods/*
+!kubejs/client_scripts/
+!kubejs/server_scripts/
+!kubejs/startup_scripts/
 
 !mods/rhino*.jar
 !mods/architectury*.jar
 !mods/kubejs*.jar
 !mods/probejs*.jar
 
-!README.md
-!.gitignore
+!/README.md
+!/.gitignore
 #二次过滤
