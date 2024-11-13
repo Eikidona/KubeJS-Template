@@ -1,15 +1,20 @@
 #忽略全部
 /*
-#不忽略的
-!kubejs/client_scripts/
-!kubejs/server_scripts/
-!kubejs/startup_scripts/
-
+#不忽略的文件与文件夹
+!kubejs
+!mods
+!/README.md
+!/.gitignore
+#文件夹内
+## 这些是不要的
+kubejs/assets
+kubejs/data
+kubejs/config
+kubejs/probe
+kubejs/jsconfig.json
+kubejs/README.txt
+## 这些是要的
 !mods/rhino*.jar
 !mods/architectury*.jar
 !mods/kubejs*.jar
 !mods/probejs*.jar
-
-!/README.md
-!/.gitignore
-#二次过滤
