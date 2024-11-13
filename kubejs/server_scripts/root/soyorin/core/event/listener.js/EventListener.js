@@ -3,6 +3,7 @@
 /**
  * @class
  * @classdesc 事件监听器
+ * @template T
  * @param {(event: $Event) => void} onEvent 
  */
 function $EventListener(onEvent, priority) {
@@ -21,10 +22,9 @@ function $EventListener(onEvent, priority) {
 $EventListener.prototype = {
   /**
    * 事件时执行
-   * @param {$Event} event 
+   * @param {T extends $Event} event 
    */
   onEvent: function (event) {
-    
     this.onEvent(event);
   }
 }
