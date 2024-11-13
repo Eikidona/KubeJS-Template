@@ -1,6 +1,11 @@
 // priority: 2000
 
 /**
+ * @typedef {Object} $EventSubscriber 事件订阅者 
+ * @property {function(): void} init 
+ */
+
+/**
  * @typedef {(event: $Event) => void} $EventHandler 事件回调
  */
 
@@ -30,23 +35,24 @@ $EventBus.prototype = {
   post: function (eventName, event) {
     if (!(this.listeners.has(eventName))) return;
     this.listeners.get(eventName).forEach(listener => {
-      listener.onEvent()
+      // 调用
+      listener.onEvent(event)
     });
 
   },
   /**
    * 添加事件监听器
    * @overload
-   * @param {string} eventName
-   * @param {$EventHandler} eventCallback 
+   * @param {string} eventName - 事件id
+   * @param {(event: $Event) => void} eventCallback - 事件回调
    * @returns {void} 
    */
   /**
-   * 添加事件监听器
+   * 添加事件监听器 
    * @overload
-   * @param {string} eventName
-   * @param {$EventHandler} eventCallback 
-   * @param {$Priority} priority 
+   * @param {string} eventName - 事件id
+   * @param {(event: $Event) => void} eventCallback - 事件回调
+   * @param {$Priority} priority - 优先级 可选的
    * @returns {void}
    */
   addListener: function (eventName, eventCallback, priority) {
@@ -64,5 +70,29 @@ $EventBus.prototype = {
  * 静态
  */
 $EventBus.static = {
-  EVENT_BUS: new $EventBus()
+  EVENT_BUS: new $EventBus(),
+  /**
+   * 添加订阅者 尽可能早的将订阅添加到事件总线 以防止事件发布时还未订阅的情况发生 还在设想实验中
+   * @param {$EventSubscriber} subscriber 
+   */
+  addSubscriber: function (subscriber) {
+    // if (!Boolean(subscriber)) { // 添加的对象如果没有subscriber属性则退出并抛出错误
+    //   console.error('无效的订阅!添加的Subscriber对象没有subscriber属性');
+    // } else {
+    //   for (const key in subscriber.subscriber) {
+    //     if (Object.prototype.hasOwnProperty(key)) {
+    //       let element = object[key];
+    //       element
+
+    //     }
+    //   }
+    // }
+  },
+  /**
+   * 添加事件发布者 代替手动发布事件 将发布事件延后到init及其以后 防止过早的发布错过订阅 还在设想实验中
+   * @param {$EventPublisher} publisher 
+   */
+  addEventPublisher: function (publisher) {
+    
+  }
 }

@@ -36,7 +36,7 @@ $Registry.prototype = {
   register: function (key, value) {
     this.byKey.set(String(key), value);
     this.byValue.set(value, String(key));
-    $Registry.static.getKey(this).get()
+    $Registry.static.getRegistryKey(this).get()
     ResourceKey.create
   }
 }
@@ -51,7 +51,7 @@ $Registry.static = {
    * @param {$Registry<T>} registry 
    * @returns {Internal.Optional<ResourceLocation>}
    */
-  getKey: function (registry) {
+  getRegistryKey: function (registry) {
     return this.ROOT_REGISTRY.getKey(registry);
   },
   /**
@@ -59,7 +59,7 @@ $Registry.static = {
    * @param {ResourceLocation} registryName 
    * @returns {Internal.Optional<$Registry<T>>} 
    */
-  get: function (registryName) {
+  getRegistry: function (registryName) {
     return this.ROOT_REGISTRY.get(registryName);
   },
   /**
@@ -68,9 +68,35 @@ $Registry.static = {
    * @param {$Registry<T>} registry 
    * @returns {$ResourceKey<$Registry>} 
    */
-  register: function (registryName, registry) {
+  registerRegistry: function (registryName, registry) {
     this.ROOT_REGISTRY.register(registryName, registry);
     return new $ResourceKey(this.ROOT_REGISTRY_KEY, registryName);
+  },
+  /**
+   * 创建注册表 
+   * @param {ResourceLocation} defaultKey 
+   * @param {T} defaultValue 
+   * @param {$Registry<T>} 
+   */
+  createRegistry: function (defaultKey, defaultValue) {
+    let registry = new $Registry();
+    registry.register(defaultKey, defaultValue);
+    return registry;
+  },
+  /**
+   * 构建注册表
+   * @param {$RegistryBuilder} builder 
+   */
+  buildRegistry: function (builder) {
+    let { registryName, defaultKey, defaultValue } = builder;
+    try {
+      if (!ResourceLocation.isValidResourceLocation(defaultKey)) throw new Error(`defaultKey不合法 它应该是符合ResourceLocation规范的string 输入值: ${defaultKey}`);
+      if (!ResourceLocation.isValidResourceLocation(registryName)) throw new Error(`defaultKey不合法 它应该是符合ResourceLocation规范的string 输入值: ${registryName}`);
+      let registry = this.createRegistry(new ResourceLocation(defaultKey), defaultValue());
+      this.registerRegistry(new ResourceLocation(registryName), registry);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 
@@ -116,5 +142,21 @@ $RegistryBuilder.prototype = {
   }
 }
 $RegistryBuilder.static = {
-
+  /**@type {$RegistryBuilder[]} 构造队列 */
+  BUILDERS: [],
+  init: function () {
+    // 初始化期间抛出新建注册表事件
+    $EventBus.static.EVENT_BUS.post('newRegistry', new $NewRegistryEvent(this.BUILDERS));
+    // 构建注册表 清空队列
+    this.BUILDERS.forEach((builder) => {
+      $Registry.static.buildRegistry(builder);
+    })
+    // 清空队列
+    this.BUILDERS = [];
+  }
 }
+
+// 初始化事件中调用init
+$EventBus.static.EVENT_BUS.addListener('init', event => {
+  $RegistryBuilder.static.init()
+})
