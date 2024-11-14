@@ -3,28 +3,44 @@
 /**
  * @class
  * @classdesc 事件监听器
- * @template T
- * @param {(event: $Event) => void} onEvent 
+ * @template {T}
+ * @param {(event: $Event) => void} callback - 事件中执行的回调
+ * @param {$Priority} priority 
  */
-function $EventListener(onEvent, priority) {
+function $EventListener(callback, priority) {
   if (Boolean(priority)) {
     this.priority = priority;
   } else {
     this.priority = 0;
   }
-  if (Boolean(onEvent)) {
-    this.onEvent = onEvent;
+  if (Boolean(callback)) {
+    this.callback = callback;
   } else {
-    this.onEvent = () => { console.warn('空事件监听器') };
+    this.callback = () => { console.warn('空事件监听器') };
   }
 
 }
-$EventListener.prototype = {
-  /**
-   * 事件时执行
-   * @param {T extends $Event} event 
-   */
-  onEvent: function (event) {
-    this.onEvent(event);
-  }
+/**
+ * 原型
+ */
+
+/**
+ * 事件时执行 
+ * @param {$Event} event 
+ */
+$EventListener.prototype.onEvent = function (event) {
+  this.callback(event);
+}
+
+/**
+ * 静态
+ */
+
+/**
+ * 
+ * @param {(event: $Event) => void} callback 
+ * @returns {$EventListener}
+ */
+$EventListener.of = function (callback) {
+  return new $EventListener(callback, 0);
 }

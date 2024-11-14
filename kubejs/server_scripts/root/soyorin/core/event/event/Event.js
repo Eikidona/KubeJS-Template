@@ -1,7 +1,8 @@
+// priority: 2000
+
 /**
  * @class
- * @classdesc 事件基类 尽管一些参数类型标明需要$Event及其子类 但不会真的进行Instanceof判断(过时消息)
- * @description 最新消息 已经转向支持继承的方向修改 它可能需要一个较高的优先级以在继承发生时已经初始化
+ * @classdesc 事件基类 
  */
 function $Event() {
   /**
@@ -22,4 +23,11 @@ $Event.prototype.cancel = function () {
   if (this.cancelable) {
     this.canceled = true;
   }
+}
+/**
+ * 事件是否已经取消 
+ * @returns {boolean} 已经取消?
+ */
+$Event.prototype.isCanceled = function () {
+  return this.canceled;
 }

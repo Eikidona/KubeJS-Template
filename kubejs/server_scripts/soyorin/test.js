@@ -1,31 +1,10 @@
-$EventBus.static.EVENT_BUS.addListener('init', callback => {
-  console.log('测试 无优先级传递');
-})
-
-$EventBus.static.EVENT_BUS.addListener('init', callback => {
-  console.log('测试 低优先级传递');
-}, -10)
-
-$EventBus.static.EVENT_BUS.addListener('init', callback => {
-  console.log('测试 高优先级传递');
-}, 10)
-
-$EventBus.static.EVENT_BUS.addListener(
-  'newRegistry',
-  /**
-   * @param {$NewRegistryEvent} newRegistryEvent 
-   */
-  (newRegistryEvent) => {
-    newRegistryEvent.create().setRegistryName('modpack:empty').setDefaultKey('modpack:empty').setDefaultValue(() => 'testString');
-  }
-)
 // 新建了注册表
 $ModpackEvents.newRegistry(event => {
   event.create().setRegistryName('modpack:test').setDefaultKey('modpack:default').setDefaultValue(() => 666);
 })
 
 PlayerEvents.chat(event => {
-  let registry = $Registry.static.getRegistry(new ResourceLocation('modpack:test')); 
+  let registry = $Registry.getRegistry(new ResourceLocation('modpack:test'));
   registry.ifPresentOrElse(
     r => {
       event.player.tell(`注册表有效`);
@@ -38,3 +17,26 @@ PlayerEvents.chat(event => {
   // let value = registry.get().get(new ResourceLocation('modpack:empty')).get();
   
 })
+
+// function $Test(name) {
+//   this.name = name;
+// }
+// function $SubTest(name) {
+//   this.name = name;
+// }
+// $SubTest.prototype = Object.create($Test.prototype);
+
+// /**@type {Map<function, Object>} */
+// let map = new Map();
+// // 模拟添加事件监听器 不使用字符串
+// map.set($Test.prototype, (obj, player) => player.tell(`Name ${obj.name}`));
+// PlayerEvents.chat(event => {
+//   /**@type {Internal.ServerPlayer} */
+//   let serverPlayer = event.player;
+//   let test = new $Test('name');
+//   // 模拟发布事件
+//   // map.get(Object.getPrototypeOf(test))(test, serverPlayer)
+//   map.get(Object.getPrototypeOf(test))(new $Test('name'), serverPlayer);
+//   // serverPlayer.tell(`${Object.getPrototypeOf(test) == $Test.prototype}`)
+//   // serverPlayer.tell(`类 ${typeof $Test} 实例 ${typeof new $Test('name')}`);
+// });

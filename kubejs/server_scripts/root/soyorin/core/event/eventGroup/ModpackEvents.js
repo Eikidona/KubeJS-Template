@@ -7,6 +7,6 @@ const $ModpackEvents = {
    * @param {(event: $NewRegistryEvent) => void} handler
    */
   newRegistry: function (handler) {
-    $EventBus.static.EVENT_BUS.addListener('newRegistry', handler);
+    $EventBus.EVENT_BUS.addListener($NewRegistryEvent, handler);
   }
 }
