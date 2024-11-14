@@ -1,4 +1,4 @@
-// priority: 2000
+// priority: 1000
 
 /**
  * @typedef {Object} $EventSubscriber 事件订阅者 
