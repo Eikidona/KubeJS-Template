@@ -100,6 +100,15 @@ $Registry.getRegistry = function (registryName) {
   return this.ROOT_REGISTRY.get(registryName);
 }
 /**
+ * 注册
+ * @param {$Registry<T>} registry 
+ * @param {$ResourceKey<T>} key 
+ * @param {T} value 
+ */
+$Registry.register = function (registry, key, value) {
+  registry.register(key.getLocation(), value);
+}
+/**
  * 登记注册表
  * @param {ResourceLocation} registryName 
  * @param {$Registry<T>} registry 

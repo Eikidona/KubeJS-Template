@@ -4,15 +4,15 @@
  * @param {$EventBus} eventBus 
  * @param {$ModuleContainer} moduleContainer 
  */
-function $RegistryModule(eventBus, moduleContainer) {
+function $RegistryManager(eventBus, moduleContainer) {
   // eventBus.addListener() 初始化完全没有必要再使用initEvent
-  $RegistryModule.init(eventBus);
+  $RegistryManager.init(eventBus);
 }
 /**
  * 初始化
  * @param {$EventBus} eventBus 
  */
-$RegistryModule.init = function (eventBus) {
+$RegistryManager.init = function (eventBus) {
   /**@type {$RegistryBuilder[]} */
   let builders = [];
   eventBus.post(new $NewRegistryEvent(builders));
@@ -20,4 +20,4 @@ $RegistryModule.init = function (eventBus) {
 }
 
 // 添加注册表模块 它会负责在恰当时机将其实例化
-$Main.addModule($RegistryModule);
+$Main.addModule($RegistryManager);
