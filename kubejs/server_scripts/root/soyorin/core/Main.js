@@ -56,7 +56,8 @@ $Main.load = function () {
   })
 }
 
-$Main.INSTANCE = new $Main();
+// 实例化
+// $Main.INSTANCE = new $Main();
 
 // $Main.static = {
 //   INSTANCE: new $Main(),
