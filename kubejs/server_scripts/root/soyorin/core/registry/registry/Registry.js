@@ -13,7 +13,7 @@ function $Registry() {
 }
 
 /**
- * 原型 
+ * prototype
  */
 
 /**
@@ -34,14 +34,17 @@ $Registry.prototype.getKey = function (value) {
 }
 /**
  * 注册
- * @param {ResourceLocation} key 
+ * @param {$ResourceKey<T>} key 
  * @param {T} value 
  */
 $Registry.prototype.register = function (key, value) {
-  this.byKey.set(String(key), value);
-  this.byValue.set(value, String(key));
-  $Registry.getRegistryKey(this).get()
-  ResourceKey.create
+  // if(this.byKey.has(key))
+  let keyString = String(key.getLocation());
+  if (this.byKey.has(keyString)) throw new Error(`${key.toString()}已经注册！`);
+  this.byKey.set(keyString, value);
+  this.byValue.set(value, keyString);
+  // $Registry.getRegistryKey(this).get()
+  // ResourceKey.create
 }
 // $Registry.prototype = {
 //   /**
@@ -74,76 +77,81 @@ $Registry.prototype.register = function (key, value) {
 // }
 
 /**
- * 静态
+ * Static
  */
-$Registry.ROOT_REGISTRY_KEY = new ResourceLocation('modpack', 'root')
-$Registry.ROOT_REGISTRY = new $Registry();
+// $Registry.ROOT_REGISTRY_KEY = new ResourceLocation('modpack', 'root')
+// $Registry.ROOT_REGISTRY = new $Registry();
 
 // $Registry.init = function () {
 //   $EventBus.EVENT_BUS.post('newRegistry', new $NewRegistryEvent())
 // }
 
+// /**
+//  * 获取注册表的键
+//  * @param {$Registry<T>} registry 
+//  * @returns {$Optional<ResourceLocation>}
+//  */
+// $Registry.getRegistryKey = function (registry) {
+//   return this.ROOT_REGISTRY.getKey(registry);
+// }
+// /**
+//  * 获取注册表
+//  * @param {ResourceLocation} registryName 
+//  * @returns {$Optional<$Registry<T>>} 
+//  */
+// $Registry.getRegistry = function (registryName) {
+//   return this.ROOT_REGISTRY.get(registryName);
+// }
 /**
- * 获取注册表的键
- * @param {$Registry<T>} registry 
- * @returns {$Optional<ResourceLocation>}
- */
-$Registry.getRegistryKey = function (registry) {
-  return this.ROOT_REGISTRY.getKey(registry);
-}
-/**
- * 获取注册表
- * @param {ResourceLocation} registryName 
- * @returns {$Optional<$Registry<T>>} 
- */
-$Registry.getRegistry = function (registryName) {
-  return this.ROOT_REGISTRY.get(registryName);
-}
-/**
- * 注册
+ * 向注册表注册项目
  * @param {$Registry<T>} registry 
  * @param {$ResourceKey<T>} key 
  * @param {T} value 
  */
 $Registry.register = function (registry, key, value) {
-  registry.register(key.getLocation(), value);
+  registry.register(key, value);
 }
-/**
- * 登记注册表
- * @param {ResourceLocation} registryName 
- * @param {$Registry<T>} registry 
- * @returns {$ResourceKey<$Registry>} 
- */
-$Registry.registerRegistry = function (registryName, registry) {
-  this.ROOT_REGISTRY.register(registryName, registry);
-  return new $ResourceKey(this.ROOT_REGISTRY_KEY, registryName);
-}
+// /**
+//  * 登记注册表
+//  * @param {ResourceLocation} registryName 
+//  * @param {$Registry<T>} registry 
+//  * @returns {$ResourceKey<$Registry>} 
+//  */
+// $Registry.registerRegistry = function (registryName, registry) {
+//   this.ROOT_REGISTRY.register($ResourceKey.createRegistryKey(registryName), registry);
+//   return new $ResourceKey(this.ROOT_REGISTRY_KEY, registryName);
+// }
 /**
  * 创建注册表 
  * @param {ResourceLocation} defaultKey 
  * @param {T} defaultValue 
  * @param {$Registry<T>} 
  */
-$Registry.createRegistry = function (defaultKey, defaultValue) {
+$Registry.create = function (defaultKey, defaultValue) {
   let registry = new $Registry();
   registry.register(defaultKey, defaultValue);
   return registry;
 }
-/**
- * 构建注册表
- * @param {$RegistryBuilder} builder 
- */
-$Registry.buildRegistry = function (builder) {
-  let { registryName, defaultKey, defaultValue } = builder;
-  try {
-    if (!ResourceLocation.isValidResourceLocation(defaultKey)) throw new Error(`defaultKey不合法 它应该是符合ResourceLocation规范的string 输入值: ${defaultKey}`);
-    if (!ResourceLocation.isValidResourceLocation(registryName)) throw new Error(`defaultKey不合法 它应该是符合ResourceLocation规范的string 输入值: ${registryName}`);
-    let registry = this.createRegistry(new ResourceLocation(defaultKey), defaultValue());
-    this.registerRegistry(new ResourceLocation(registryName), registry);
-  } catch (error) {
-    console.error(error);
-  }
-}
+// 不合时宜的函数
+// /**
+//  * 构建注册表
+//  * @param {$RegistryBuilder} builder 
+//  * @returns {$Registry<T>}
+//  */
+// $Registry.buildRegistry = function (builder) {
+//   let { registryName, defaultKey, defaultValue } = builder;
+//   /**@type {$Registry<T>} */
+//   let registry;
+//   try {
+//     if (!ResourceLocation.isValidResourceLocation(defaultKey)) throw new Error(`defaultKey不合法 它应该是符合ResourceLocation规范的string 输入值: ${defaultKey}`);
+//     if (!ResourceLocation.isValidResourceLocation(registryName)) throw new Error(`defaultKey不合法 它应该是符合ResourceLocation规范的string 输入值: ${registryName}`);
+//     registry = this.createRegistry(new ResourceLocation(defaultKey), defaultValue());
+//     this.registerRegistry(new ResourceLocation(registryName), registry);
+//   } catch (error) {
+//     console.error(error);
+//   }
+//   return registry;
+// }
 // $Registry.static = {
 //   ROOT_REGISTRY_KEY: new ResourceLocation('modpack', 'root'),
 //   ROOT_REGISTRY: new $Registry(),
@@ -206,7 +214,7 @@ $Registry.buildRegistry = function (builder) {
 
 /**
  * @class
- * @classdesc 注册表构建器 用于在事件中使用
+ * @classdesc 注册表构建器 
  */
 function $RegistryBuilder() {
   /**@type {string} */
@@ -218,7 +226,7 @@ function $RegistryBuilder() {
 }
 
 /**
- * 原型
+ * prototype
  */
 
 /**
@@ -248,13 +256,25 @@ $RegistryBuilder.prototype.setDefaultValue = function (defaultValue) {
   this.defaultValue = defaultValue;
   return this;
 }
-/**
- * 
- * @param {$RegistryBuilder} builder 
- */
-$RegistryBuilder.build = function (builder) {
-  $Registry.buildRegistry(builder);
-}  
+// /**
+//  * 构建注册表 ###未完成###
+//  * @param {$RegistryBuilder} builder 
+//  * @returns {$Registry<T>}
+//  */
+// $RegistryBuilder.build = function (builder) { 
+//   let { registryName, defaultKey, defaultValue } = builder;
+//   /**@type {$Registry<T>} */
+//   let registry;
+//   try {
+//     if (!ResourceLocation.isValidResourceLocation(defaultKey)) throw new Error(`defaultKey不合法 它应该是符合ResourceLocation规范的string 输入值: ${defaultKey}`);
+//     if (!ResourceLocation.isValidResourceLocation(registryName)) throw new Error(`defaultKey不合法 它应该是符合ResourceLocation规范的string 输入值: ${registryName}`);
+//     registry = $Registry.createRegistry(new ResourceLocation(defaultKey), defaultValue());
+//     // this.registerRegistry(new ResourceLocation(registryName), registry);
+//   } catch (error) {
+//     console.error(error);
+//   }
+//   return registry;
+// }
   
 // $RegistryBuilder.prototype = {
 //   /**

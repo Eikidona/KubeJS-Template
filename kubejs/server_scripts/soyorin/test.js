@@ -1,10 +1,13 @@
 // 新建了注册表
 $ModpackEvents.newRegistry(event => {
-  event.create().setRegistryName('modpack:test').setDefaultKey('modpack:default').setDefaultValue(() => 666);
+  // let builder = event.getBuilder().setRegistryName('modpack:test').setDefaultKey('modpack:default').setDefaultValue(() => 666);
+  // let registry = event.create(builder);
+  // event.register(registry);
+  event.create().setRegistryName('modpack:test').setDefaultKey('modpack:default').setDefaultValue(() => '测试值');
 })
 
 PlayerEvents.chat(event => {
-  let registry = $Registry.getRegistry(new ResourceLocation('modpack:test'));
+  let registry = $RegistryManager.getRegistry(new ResourceLocation('modpack:test'));
   registry.ifPresentOrElse(
     r => {
       event.player.tell(`注册表有效`);
@@ -15,7 +18,7 @@ PlayerEvents.chat(event => {
     }
   )
   // let value = registry.get().get(new ResourceLocation('modpack:empty')).get();
-  
+
 })
 
 // function $Test(name) {

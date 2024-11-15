@@ -13,19 +13,36 @@ function $ResourceKey(registry, location) {
   /**@type {ResourceLocation} */
   this.location = location;
 }
-$ResourceKey.prototype = {
-  /**
-   * 获取该注册项的注册表的资源位置
-   * @returns {ResourceLocation}
-   */
-  getRegistry: function () {
-    return this.registry;
-  },
-  /**
-   * 获取该注册项的资源位置
-   * @returns {ResourceLocation}
-   */
-  getLocation: function () {
-    return this.location;
-  }
+/**
+* 获取该注册项的注册表的资源位置
+* @returns {ResourceLocation}
+*/
+$ResourceKey.prototype.getRegistry = function () {
+  return this.registry;
+}
+/**
+ * 获取该注册项的资源位置
+ * @returns {ResourceLocation}
+ */
+$ResourceKey.prototype.getLocation = function () {
+  return this.location;
+}
+/**
+ * 转换为字符串
+ * @returns {string} 
+ */
+$ResourceKey.prototype.toString = function () {
+  return `${this.getRegistry().toString() + this.location.toString()}`;
+}
+/**
+ * Static
+ */
+
+/**
+ * 创建注册表项
+ * @param {ResourceLocation} name 注册表名
+ * @returns {$ResourceKey<$Registry<T>>} 
+ */
+$ResourceKey.createRegistryKey = function (name) {
+  return new $ResourceKey($RegistryManager.ROOT_REGISTRY_NAME, name);
 }
