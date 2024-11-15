@@ -1,10 +1,8 @@
 /**
  * @class
  * @classdesc 注册表管理器
- * @param {$EventBus} eventBus 
- * @param {$ModuleContainer} moduleContainer 
  */
-function $RegistryManager(eventBus, moduleContainer) {
+function $RegistryManager() {
   // eventBus.addListener() 初始化完全没有必要再使用initEvent
   // $RegistryManager.postNewRegistryEvent(eventBus);
 }
@@ -13,13 +11,13 @@ function $RegistryManager(eventBus, moduleContainer) {
  * prototype
  */
 
-/**
- * 
- * @param {$EventBus} eventBus 
- */
-$RegistryManager.prototype.postEvent = function (eventBus) {
-  $RegistryManager.postNewRegistryEvent(eventBus);
-}
+// /**
+//  * 
+//  * @param {$EventBus} eventBus 
+//  */
+// $RegistryManager.prototype.postEvent = function (eventBus) {
+//   $RegistryManager.postNewRegistryEvent(eventBus);
+// }
 
 /**
  * Static
@@ -61,5 +59,26 @@ $RegistryManager.getRegistry = function (registryName) {
   return $RegistryManager.ROOT_REGISTRY.get(registryName);
 }
 
-// 添加注册表模块 它会负责在恰当时机将其实例化
-$Main.addModule($RegistryManager);
+/**
+ * 获取注册表ResourceLocation
+ * @param {ResourceLocation} registry
+ * @returns {$Optional<ResourceLocation>}  
+ */
+$RegistryManager.getRegistryKey = function (registry) {
+  return $RegistryManager.ROOT_REGISTRY.getKey(registry);
+}
+
+/**
+ * 一键创建注册表
+ * @param {string} registryName 
+ * @returns {$Registry<T>} 
+ */
+$RegistryManager.createRegistry = function (registryName) {
+  let registry = new $Registry();
+  let registryKey = $ResourceKey.createRegistryKey(new ResourceLocation(registryName));
+  this.ROOT_REGISTRY.register(registryKey, registry);
+  return registry;
+}
+
+// // 添加注册表模块 它会负责在恰当时机将其实例化
+// $Main.addModule($RegistryManager);
