@@ -5,13 +5,12 @@
  * @classdesc 主
  */
 function $Main() {
-  /**@type {Map<string, Object} */
-  this.modules = new Map();
+  $Main.load();
 }
-$Main.prototype = {
+/**
+ * prototype
+ */
 
-}
-$Main.INSTANCE = new $Main();
 // /**
 //  * 初始化 准备修改这个流程
 //  */
@@ -26,19 +25,38 @@ $Main.INSTANCE = new $Main();
 // }
 
 /**
+ * Static
+ */
+/**@type {Map<Object, Object} */
+$Main.MODULES = new Map();
+
+/**
  * 模拟@Mod 注解 代理依赖此系统的模块初始化 并使依赖此系统的模块可拆卸
  */
 
 /**
  * 接受构造函数本身
- * @param {function($EventBus, $ModuleContainer): void} constructor 
+ * @param {function($EventBus, $ModuleContainer): void} module 
  */
-$Main.addModule = function (constructor) {
-  // 接受模块的主类 合适的时机实例化
+$Main.addModule = function (module) {
+  this.MODULES.set(module.prototype, () => new module($EventBus.EVENT_BUS, new $ModuleContainer));
+}
+
+$Main.load = function () {
   ServerEvents.lowPriorityData(event => {
-    this.INSTANCE.modules.set(constructor.prototype, new constructor($EventBus.EVENT_BUS, new $ModuleContainer));
+    // 加载 并调用对应函数
+    this.MODULES.forEach((value, key, map) => {
+      let instance = value()
+      map.set(key, instance);
+      if (Boolean(instance.postEvent)) {
+        instance.postEvent($EventBus.EVENT_BUS);
+      }
+    })
+
   })
 }
+
+$Main.INSTANCE = new $Main();
 
 // $Main.static = {
 //   INSTANCE: new $Main(),

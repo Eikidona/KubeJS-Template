@@ -55,10 +55,13 @@ $NewRegistryEvent.REGISTRY_BUILDERS = [];
  */
 $NewRegistryEvent.build = function () {
   if (this.REGISTRY_BUILDERS.length > 0) {
+    console.log(`长度 ${this.REGISTRY_BUILDERS.length}`)
     this.REGISTRY_BUILDERS.forEach(builder => {
+
       let registryKey = $ResourceKey.createRegistryKey(new ResourceLocation(builder.registryName));
       let registry = $Registry.create(new $ResourceKey(registryKey.getRegistry(), new ResourceLocation(builder.defaultKey)), builder.defaultValue());
+      
       $RegistryManager.registerRegistry(registryKey, registry);
-    })
+    });
   }
 }

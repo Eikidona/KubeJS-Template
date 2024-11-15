@@ -32,7 +32,7 @@ $ResourceKey.prototype.getLocation = function () {
  * @returns {string} 
  */
 $ResourceKey.prototype.toString = function () {
-  return `${this.getRegistry().toString() + this.location.toString()}`;
+  return `${this.getRegistry().toString() + '/' + this.location.toString()}`;
 }
 /**
  * Static

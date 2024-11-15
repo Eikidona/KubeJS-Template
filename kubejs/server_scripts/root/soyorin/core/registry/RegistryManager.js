@@ -6,8 +6,25 @@
  */
 function $RegistryManager(eventBus, moduleContainer) {
   // eventBus.addListener() 初始化完全没有必要再使用initEvent
+  // $RegistryManager.postNewRegistryEvent(eventBus);
+}
+
+/**
+ * prototype
+ */
+
+/**
+ * 
+ * @param {$EventBus} eventBus 
+ */
+$RegistryManager.prototype.postEvent = function (eventBus) {
   $RegistryManager.postNewRegistryEvent(eventBus);
 }
+
+/**
+ * Static
+ */
+
 /**
  * 根注册表
  * @type {$Registry<$Registry<T>>} 
@@ -20,8 +37,8 @@ $RegistryManager.ROOT_REGISTRY_NAME = new ResourceLocation('modpack', 'root');
  * @param {$EventBus} eventBus 
  */
 $RegistryManager.postNewRegistryEvent = function (eventBus) {
-  let event = new $NewRegistryEvent();
-  eventBus.post(event);
+  let newRegistry = new $NewRegistryEvent();
+  eventBus.post(newRegistry);
   $NewRegistryEvent.build();
   // event.registryBuilders.forEach(builder => $RegistryBuilder.build(builder));
 }

@@ -1,8 +1,5 @@
 // 新建了注册表
 $ModpackEvents.newRegistry(event => {
-  // let builder = event.getBuilder().setRegistryName('modpack:test').setDefaultKey('modpack:default').setDefaultValue(() => 666);
-  // let registry = event.create(builder);
-  // event.register(registry);
   event.create().setRegistryName('modpack:test').setDefaultKey('modpack:default').setDefaultValue(() => '测试值');
 })
 

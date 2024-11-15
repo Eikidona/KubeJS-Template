@@ -19,7 +19,8 @@
  */
 function $EventBus() {
   /**
-   * @type {Map<string, $EventListener[]>} - 事件回调 初始化事件前后这里的数据类型不同
+   * 侦听器列表 存储了原型与侦听器 其中原型可以用于判断类型
+   * @type {Map<Object, $EventListener[]>} 
   */
   this.listeners = new Map();
 }
@@ -32,26 +33,27 @@ function $EventBus() {
  * @param {$Event} event 
  */
 $EventBus.prototype.post = function (event) {
-  if (!(this.listeners.has(Object.getPrototypeOf(event)))) return;
-  this.listeners.get(Object.getPrototypeOf(event)).forEach(listener => {
-    // 调用
-    listener.onEvent(event);
-  });
-
+  // 即时侦听器列表存在侦听器
+  if (this.listeners.has(Object.getPrototypeOf(event))) {
+    this.listeners.get(Object.getPrototypeOf(event)).forEach(listener => {
+      // 调用
+      listener.onEvent(event);
+    });
+  }
 }
 /**
- * 添加具有默认优先级的事件监听器
+ * 添加具有默认优先级的事件侦听器
  * @overload
  * @param {Function} event 事件类
  * @param {($Event) => void} eventCallback 事件回调
  * @returns {void}
  */
 /**
- * 添加指定优先级的事件监听器
+ * 添加指定优先级的事件侦听器
  * @overload
  * @param {Function} event 事件类
  * @param {($Event) => void} eventCallback 事件回调
- * @param {$Priority} priority 监听器优先级
+ * @param {$Priority} priority 侦听器优先级
  * @returns {void}
  */
 $EventBus.prototype.addListener = function (event, callback, priority) {
@@ -65,7 +67,7 @@ $EventBus.prototype.addListener = function (event, callback, priority) {
   this.listeners.get(event.prototype).sort((a, b) => b.priority - a.priority);
 }
 /**
- * 注册一个对象或一个类 根据<>自动注册事件监听器
+ * 注册一个对象或一个类 根据<>自动注册事件侦听器
  * @param {function | Object} object 
  */
 $EventBus.prototype.register = function (object) {
@@ -87,14 +89,14 @@ $EventBus.prototype.register = function (object) {
 
 //   },
 //   /**
-//    * 添加事件监听器
+//    * 添加事件侦听器
 //    * @overload
 //    * @param {string} eventName - 事件id
 //    * @param {(event: $Event) => void} eventCallback - 事件回调
 //    * @returns {void}
 //    */
 //   /**
-//    * 添加事件监听器
+//    * 添加事件侦听器
 //    * @overload
 //    * @param {string} eventName - 事件id
 //    * @param {(event: $Event) => void} eventCallback - 事件回调
