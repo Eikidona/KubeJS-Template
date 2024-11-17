@@ -1,3 +1,5 @@
+// priority: 2000
+
 /**
  * @class
  * @classdesc 注册表管理器
@@ -25,44 +27,44 @@ function $RegistryManager() {
 
 /**
  * 根注册表
- * @type {$Registry<$Registry<T>>} 
+ * @type {$Registry<$DefaultRegistry<T>>} 
  */
 $RegistryManager.ROOT_REGISTRY = new $Registry();
 $RegistryManager.ROOT_REGISTRY_NAME = new ResourceLocation('modpack', 'root');
 
-/**
- * 发布新建注册表事件
- * @param {$EventBus} eventBus 
- */
-$RegistryManager.postNewRegistryEvent = function (eventBus) {
-  let newRegistry = new $NewRegistryEvent();
-  eventBus.post(newRegistry);
-  $NewRegistryEvent.build();
-  // event.registryBuilders.forEach(builder => $RegistryBuilder.build(builder));
-}
+// /**
+//  * 发布新建注册表事件
+//  * @param {$EventBus} eventBus 
+//  */
+// $RegistryManager.postNewRegistryEvent = function (eventBus) {
+//   let newRegistry = new $NewRegistryEvent();
+//   eventBus.post(newRegistry);
+//   $NewRegistryEvent.build();
+//   // event.registryBuilders.forEach(builder => $RegistryBuilder.build(builder));
+// }
+
+// /**
+//  * 登记注册表 
+//  * @param {string} name
+//  * @param {$Registry<T>} registry 
+//  */
+// $RegistryManager.registerRegistry = function (name, registry) {
+//   this.ROOT_REGISTRY.register(name, registry);
+// }
 
 /**
- * 登记注册表 
- * @param {$ResourceKey<$Registry<T>>} registryKey
- * @param {$Registry<T>} registry 
- */
-$RegistryManager.registerRegistry = function (registryKey, registry) {
-  this.ROOT_REGISTRY.register(registryKey, registry);
-}
-
-/**
- * 获取注册表
- * @param {ResourceLocation} registryName
+ * 获取注册表对象
+ * @param {string} name
  * @returns {$Optional<$Registry<T>>} 
  */
-$RegistryManager.getRegistry = function (registryName) {
-  return $RegistryManager.ROOT_REGISTRY.get(registryName);
+$RegistryManager.getRegistry = function (name) {
+  return $RegistryManager.ROOT_REGISTRY.get(name);
 }
 
 /**
- * 获取注册表ResourceLocation
- * @param {ResourceLocation} registry
- * @returns {$Optional<ResourceLocation>}  
+ * 获取注册表注册名
+ * @param {$Registry<T>} registry
+ * @returns {$Optional<string>}  
  */
 $RegistryManager.getRegistryKey = function (registry) {
   return $RegistryManager.ROOT_REGISTRY.getKey(registry);
@@ -70,13 +72,16 @@ $RegistryManager.getRegistryKey = function (registry) {
 
 /**
  * 一键创建注册表
- * @param {string} registryName 
+ * @param {string} name 
+ * @param {string} defaultKey
+ * @param {T} defaultValue
  * @returns {$Registry<T>} 
  */
-$RegistryManager.createRegistry = function (registryName) {
-  let registry = new $Registry();
-  let registryKey = $ResourceKey.createRegistryKey(new ResourceLocation(registryName));
-  this.ROOT_REGISTRY.register(registryKey, registry);
+$RegistryManager.createRegistry = function (name, defaultKey, defaultValue) {
+  /**@type {$DefaultRegistry<T>} */
+  let registry = new $DefaultRegistry(defaultKey, defaultValue);
+  // let registryKey = $ResourceKey.createRegistryKey(new ResourceLocation(name));
+  this.ROOT_REGISTRY.register(name, registry);
   return registry;
 }
 

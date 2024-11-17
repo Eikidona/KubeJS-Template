@@ -1,16 +1,18 @@
-/**
- * @class 
- * @classdesc 
- */
-function $Faction() {
-  this.entities = new Set();
-}
+// priority: 2000
 
 /**
- * prototype
+ * @class
+ * @classdesc 
+ * @param {Special.EntityType[]} entities 
+ * @param {$FactionRelation} factionRelation 
  */
-$Faction.prototype
-/**
- * Static
- */
-$Faction.EMPTY = new $Faction();
+function $Faction(entities, factionRelation) {
+  this.entities = new Set(entities);
+  this.factionRelation = factionRelation;
+}
+$Faction.prototype.getEntities = function () {
+  return this.entities;
+}
+$Faction.prototype.getFactionRelation = function () {
+  return this.factionRelation;
+}
