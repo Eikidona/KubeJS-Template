@@ -1,25 +1,28 @@
-# 后边的规则会覆盖前边的规则
-
 # 忽略全部
 /*
+
 # README.md
 !README.md
+
 # .gitignore
 !.gitignore
-# KubeJS
-## 别忽略kubejs文件夹
+
+# KubeJS 白名单
 !/kubejs/
-### 别忽略这些文件夹
+/kubejs/*
+## 白名单
 !/kubejs/client_scripts/
 !/kubejs/server_scripts/
 !/kubejs/startup_scripts/
-### 这些要忽略
-/kubejs/assets/
-/kubejs/config/
-/kubejs/data/
-# Mods
-## 别忽略这些mod
+# ### 这些要忽略
+# /kubejs/assets/
+# /kubejs/config/
+# /kubejs/data/
+
+# Mods 白名单
 !/mods/
+/mods/*
+## 白名单
 !/mods/architectury*.jar
 !/mods/kubejs*.jar
 !/mods/probejs*.jar
